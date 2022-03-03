@@ -15,8 +15,13 @@ foreach($list as $row)
     </tr>
 <?php }?>
 </table>
+
 <br />
-1 2 3 4 5 6 7 8 9 10
+<form method="get">
+<input type='text' name="search" value="<?php echo $search?>">
+<input type="submit" value="검색하기">
+</form>
+<?php echo $page_nation;?>
 <br />
 
 
