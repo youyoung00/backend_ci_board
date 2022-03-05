@@ -88,6 +88,8 @@ class Board extends CI_Controller {
 	private function comment_list($board_id)
 	{ 
 		$data['result'] = $this->Board_model->comment_list($board_id);
+		$data['board_id'] = $board_id;
+		
 		$this->load->view("comment/list",$data);
 	}
 

@@ -99,32 +99,50 @@ class Board_model extends CI_Model {
 
     }
 
-    public function comment_list($board_id)
-    {
-        $data = $this->db->query("
-            select
-                _id,
-                content,
-                (select email from ci_member where _id = ci_comment.member_id) as name
-            from
-                ci_comment as ci_comment
-            where
-                board_id = ".$board_id."
-        ");
+    public function comment_list($board_id) {
 
-        return  $data->result_array();
+        // board_id값을 입력받아 해당 게시물에 해당하는 댓글의 리스트를 불러오는 쿼리
+        $data = $this->db->query("
+        SELECT
+            _id,
+            content,
+            (select email from ci_member where _id = ci_comment.member_id) as name
+        FROM
+            ci_comment as ci_comment
+        WHERE
+            status = 0
+        AND
+            board_id = ".$board_id."
+        ;
+        ");
+    
+        return $data->result_array();
+    
     }
 
-    public function comment_delete($view_id, $comment_id){
+    public function comment_insert($board_id, $content) {
+
+        // 게시물 id, content 값을 받아 댓글을 새로 삽입하는 쿼리 수행
+        $this->db->query("
+        INSERT INTO ci_comment
+            (board_id, content)
+        VALUES
+            (".$board_id.", '".$content."')
+        ;
+        ");
+    
+    }
+
+    public function comment_delete($comment_id){
 
         $this->db->query("
-                UPDATE 
-                        ci_comment
-                SET 
-                        status = 1
-                WHERE 
-                        _id = ".$comment_id."
-                ");
+            UPDATE 
+                ci_comment
+            SET
+                status = 1
+            WHERE
+                _id = ".$comment_id."
+        ");
 
-    }
+    } 
 }
