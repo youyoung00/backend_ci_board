@@ -7,6 +7,21 @@ class Board extends CI_Controller {
 	{
 		parent::__construct();
 		$this->load->model('Board_model');  
+		$this->load->library('session');
+
+		if($this->session->userdata('email') == "")
+		{
+			header("Location: /index.php/member/login"); 
+		}
+		
+	}
+
+	public function change_board()
+	{
+		$type = $this->input->get('type');
+		$this->session->set_userdata("type",$type);
+ 
+		header("Location: /index.php/board/list"); 
 	}
 
 	public function index()
@@ -18,11 +33,15 @@ class Board extends CI_Controller {
 
 		//$search = $_GET['search'];
 		$search = $this->input->get('search');
+		$data['email'] = $this->session->userdata('email');
+		
+		$board_type = $this->session->userdata('type');
+
 		$now_page =  $this->uri->segment(3); 
 		//전체글 개수 가져오기
-		$result_count = $this->Board_model->list_total($search); 
+		$result_count = $this->Board_model->list_total($search,$board_type); 
 		//리스트 값 가져오기
-		$result_list = $this->Board_model->list_select($now_page,$search);
+		$result_list = $this->Board_model->list_select($now_page,$search,$board_type);
 
 		// pagenation 시작
 		$this->load->library('pagination'); 
@@ -43,65 +62,48 @@ class Board extends CI_Controller {
 		$data['list'] = $result_list; 
 		$data['search'] = $search;
 
+		$this->load->view('board/nav',$data); 
 		$this->load->view('board/list',$data); 
 	}
 
 	public function view(){
 		
 		$id =  $this->input->get('id');
+		$data['email'] = $this->session->userdata('email');
 
 		$result = $this->Board_model->view_select($id);
-		
 		$data['result'] = $result;
+		$data['member_id'] = $this->session->userdata('_id');
+		$data['email'] = $this->session->userdata('email');
 
+		$this->load->view('board/nav',$data); 
 		$this->load->view('board/view',$data);
 		$this->comment_list($id);
 	}
 
 	public function input(){
+		$data['email'] = $this->session->userdata('email');
+
+		$this->load->view('board/nav' ,$data); 
 		$this->load->view('board/input');
 	}
 
 	public function update(){
-		$id =  $this->input->get('id');
+		$id = $this->input->get('id');
+		$data['email'] = $this->session->userdata('email');
 
 		$result = $this->Board_model->view_select($id);
-		
 		$data['result'] = $result;
-
-
+		
+		$this->load->view('board/nav',$data); 
 		$this->load->view('board/update',$data);
-		
-	}
-
-	public function delete(){
-		$id =  $this->input->get('id');
-
-		$result = $this->Board_model->view_select($id);
-		
-		$data['result'] = $result;
-
-		$this->load->view('board/update',$data);
-		
 	}
 
 	private function comment_list($board_id)
 	{ 
 		$data['result'] = $this->Board_model->comment_list($board_id);
 		$data['board_id'] = $board_id;
-		
+		$data['member_id'] = $this->session->userdata('_id');
 		$this->load->view("comment/list",$data);
 	}
-
-	// public function comment_delete($comment_id)
-	// {
-	// 	$id = $this->input->get('id');
-
-	// 	$result = $this->Board_model->comment_list($comment_id);
-
-	// 	$data['result'] = $result;
-
-	// 	$this->load->view('board/update',$data); 
-	// }
-
 }

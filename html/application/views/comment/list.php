@@ -4,9 +4,14 @@
     {
     ?>
     <tr>
-        <td>작성자: <?php echo $row['name']?></td>
+        <td>작성자: <?php echo $row['name']?>   </td>
         <td>댓글내용 : <?php echo $row['content']?></td>
-        <td><a href="javascript:comment_delete('<?php echo $row['_id']?>','<?php echo $board_id?>');">X</a></td>
+        <td>
+        <?php if($row['member_id'] == $member_id){?>
+        <a href="javascript:comment_delete('<?php echo $row['_id']?>','<?php echo $board_id?>');">X</a>
+        <?php }?>
+    
+    </td>
     </tr>
 <?php }?>     
 </table>

@@ -1,2 +1,2 @@
 컨트롤러에서 받은 값
-<?php echo $my_val?>
+    <?php echo $gogogo?>

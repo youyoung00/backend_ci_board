@@ -3,12 +3,11 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class My extends CI_Controller {
 
-
 	public function __construct()
 	{
 			parent::__construct();
-			$this->load->model('Sample_model');
-			// $this-> Sample_model
+			$this->load->model('Sample_model'); 
+			// $this->Sample_model
 	}
 
 	public function index()
@@ -17,15 +16,6 @@ class My extends CI_Controller {
 
 			print_r($data);
 	}
-
-	public function test()
-	{
-			$data['news'] = $this->Sample_model->get_select();
-
-			print_r($data);
-	}
  
  
 }
-
-

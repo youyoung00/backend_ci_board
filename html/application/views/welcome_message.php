@@ -2,4 +2,4 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 ?>
 
-여기는 웰컴 뷰입니다.
+여기는 웰컴 뷰 입니다.
